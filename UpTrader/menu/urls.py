@@ -4,5 +4,5 @@ from . import views
 app_name = 'menu'
 
 urlpatterns = [
-    path('menu/', views.TemplateView.as_view(), name='index'),
+    path('menu/', views.MenuPageView.as_view(), name='index'),
 ]

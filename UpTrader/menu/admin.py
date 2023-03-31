@@ -8,7 +8,8 @@ class MenuAdmin(admin.ModelAdmin):
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title', 'slug', 'menu', 'parent')
+    list_display = ('pk', 'title', 'menu', 'parent')
+    prepopulated_fields = {'url': ('title', )}
 
 
 admin.site.register(Menu, MenuAdmin)

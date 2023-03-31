@@ -15,7 +15,6 @@ class Item(models.Model):
     title = models.CharField(max_length=200,
                              unique=True,
                              verbose_name='Item title')
-    slug = models.SlugField(max_length=200, verbose_name='Item slug')
     menu = models.ForeignKey(Menu,
                              blank=True,
                              null=True,
@@ -26,6 +25,8 @@ class Item(models.Model):
                                null=True,
                                related_name='childrens',
                                on_delete=models.CASCADE)
+
+    url = models.CharField(max_length=150, verbose_name='Item url')
 
     def __str__(self):
         return self.title
