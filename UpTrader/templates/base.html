@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock title %}</title>
+
+  <style>
+    .active {
+      color: blue;
+      font-weight: bold;
+    }
+  </style>
+
 </head>
 <body>
-  {% block content %}{% endblock %}
+{% block content %}{% endblock %}
 </body>
 </html>

@@ -1,6 +1,7 @@
 from django import template
+from django.urls import resolve
 
-from ..models import Item
+from ..models import Item, Menu
 
 
 register = template.Library()
@@ -16,7 +17,6 @@ def draw_menu(context, menu):
         selected_item_id = int(context['request'].GET[menu])
         selected_item = items.get(id=selected_item_id)
         selected_item_id_list = get_selected_item_id_list(selected_item, primary_item, selected_item_id)
-
         for item in primary_item:
             if item['id'] in selected_item_id_list:
                 item['child_items'] = get_child_items(items_values, item['id'], selected_item_id_list)
@@ -29,9 +29,9 @@ def draw_menu(context, menu):
                 ]
             }
 
+    result_dict['page_id'] = int(context['request'].GET.get('id', False))
     result_dict['menu'] = menu
     result_dict['other_querystring'] = get_querystring(context, menu)
-
     return result_dict
 
 
@@ -63,8 +63,6 @@ def get_selected_item_id_list(parent, primary_item, selected_item_id):
             if item['id'] == selected_item_id:
                 selected_item_id_list.append(selected_item_id)
     return selected_item_id_list
-
-
 
 
 

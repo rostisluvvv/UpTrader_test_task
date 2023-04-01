@@ -2,10 +2,16 @@
 
 {% block title %} Index Page {% endblock %}
 
-{% load draw_menu %}
+
 {% block content %}
 
-{% draw_menu 'menu1' %}
-
+<select id="selcolor" onchange="location = this.value;">
+  <option value="">Выберите Menu</option>
+  {% for item in list_menu %}
+    <option value="{% url 'menu:menu' slug=item.slug %}">
+      {{item.title}}
+    </option>
+  {% endfor %}
+</select>
 
 {% endblock %}

@@ -3,9 +3,8 @@ from django.db import models
 
 class Menu(models.Model):
     title = models.CharField(max_length=200,
-                             unique=True,
                              verbose_name='Menu title')
-    slug = models.SlugField(max_length=200, verbose_name='Menu slug')
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='Menu slug')
 
     def __str__(self):
         return self.title
