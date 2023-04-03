@@ -1,7 +1,6 @@
 from django import template
-from django.urls import resolve
 
-from ..models import Item, Menu
+from ..models import Item
 
 
 register = template.Library()
@@ -9,23 +8,28 @@ register = template.Library()
 
 @register.inclusion_tag('menu/nested_menu.html', takes_context=True)
 def draw_menu(context, menu):
-
+    """Renders a nested menu with the specified title."""
     try:
         items = Item.objects.filter(menu__title=menu)
         items_values = items.values()
         primary_item = [item for item in items_values.filter(parent=None)]
         selected_item_id = int(context['request'].GET[menu])
         selected_item = items.get(id=selected_item_id)
-        selected_item_id_list = get_selected_item_id_list(selected_item, primary_item, selected_item_id)
+        selected_item_id_list = get_selected_item_id_list(selected_item,
+                                                          primary_item,
+                                                          selected_item_id)
         for item in primary_item:
             if item['id'] in selected_item_id_list:
-                item['child_items'] = get_child_items(items_values, item['id'], selected_item_id_list)
+                item['child_items'] = get_child_items(items_values,
+                                                      item['id'],
+                                                      selected_item_id_list)
         result_dict = {'items': primary_item}
 
     except:
         result_dict = {
             'items': [
-                item for item in Item.objects.filter(menu__title=menu, parent=None).values()
+                item for item in Item.objects.filter(menu__title=menu,
+                                                     parent=None).values()
                 ]
             }
 
@@ -36,6 +40,10 @@ def draw_menu(context, menu):
 
 
 def get_querystring(context, menu):
+    """
+    Returns the query string with all parameters except for the
+    specified menu parameter.
+    """
     querystring_args = []
     for key in context['request'].GET:
         if key != menu:
@@ -45,14 +53,20 @@ def get_querystring(context, menu):
 
 
 def get_child_items(items_values, current_item_id, selected_item_id_list):
-    item_list = [item for item in items_values.filter(parent_id=current_item_id)]
+    """Recursively retrieves a list of child items for a given item."""
+    item_list = [item for item in items_values.filter(
+        parent_id=current_item_id
+    )]
     for item in item_list:
         if item['id'] in selected_item_id_list:
-            item['child_items'] = get_child_items(items_values, item['id'], selected_item_id_list)
+            item['child_items'] = get_child_items(items_values, item['id'],
+                                                  selected_item_id_list)
     return item_list
 
 
 def get_selected_item_id_list(parent, primary_item, selected_item_id):
+    """Retrieves a list of ids of the selected item and its ancestors."""
+
     selected_item_id_list = []
 
     while parent:
@@ -63,6 +77,3 @@ def get_selected_item_id_list(parent, primary_item, selected_item_id):
             if item['id'] == selected_item_id:
                 selected_item_id_list.append(selected_item_id)
     return selected_item_id_list
-
-
-
