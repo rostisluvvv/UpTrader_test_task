@@ -2,15 +2,14 @@
 
 {% block title %} Index Page {% endblock %}
 
-
 {% block content %}
 
 <select id="selcolor" onchange="location = this.value;">
   <option value="">Выберите Menu</option>
   {% for item in list_menu %}
-    <option value="{% url 'menu:menu' slug=item.slug %}">
-      {{item.title}}
-    </option>
+  <option value="{% url 'menu:menu' slug=item.slug %}">
+    {{item.title}}
+  </option>
   {% endfor %}
 </select>
 

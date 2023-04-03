@@ -7,14 +7,13 @@
 
 {% block content %}
 <button>
-<a href="{% url 'menu:index' %}"  >HOME</a>
+  <a href="{% url 'menu:index' %}">HOME</a>
 </button>
 <div>
   {{ menu_name }}
 </div>
 
 {% load draw_menu %}
-
 {% draw_menu menu_name  %}
 
 {% endblock content %}
